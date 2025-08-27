@@ -1,0 +1,24 @@
+services:
+  - type: private_service
+    name: ollama
+    env: docker
+    image: ollama/ollama:latest
+    plan: starter               # needs a paid tier to attach a disk
+    disk:
+      name: ollama-models
+      mountPath: /models
+      sizeGB: 20                # pick size for your models
+    envVars:
+      - key: OLLAMA_MODELS
+        value: /models
+      - key: OLLAMA_HOST
+        value: 0.0.0.0:11434
+
+  - type: web
+    name: fastapi
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: OLLAMA_BASE_URL
+        value: http://ollama:11434   # private hostname
