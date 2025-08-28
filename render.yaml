@@ -1,12 +1,12 @@
 services:
   - type: web
     name: fastapi-ollama
-    runtime: docker
+    runtime: docker          # (must be docker if you run Ollama in the same container)
     dockerfilePath: ./Dockerfile
     plan: free
     envVars:
       - key: OLLAMA_HOST
         value: 0.0.0.0:11434
       - key: OLLAMA_BASE_URL
-        value: http://127.0.0.1:11434   # talk to the in-container Ollama
+        value: http://127.0.0.1:11434   # <— fix: not "http://ollama:11434"
     healthCheckPath: /healthz
