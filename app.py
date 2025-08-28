@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-OLLAMA = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
+OLLAMA = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
 
 # Enable CORS for all origins
 app.add_middleware(
