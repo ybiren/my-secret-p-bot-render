@@ -1,31 +1,12 @@
 services:
-  # --- Private Ollama service ---
-  - type: pserv
-    name: ollama
-    runtime: image
-    image:
-      url: docker.io/ollama/ollama:latest   # prebuilt image
-    plan: starter                           # private services can’t be free
-    # (optional) region: frankfurt
-    disk:
-      name: ollama-models
-      mountPath: /models
-      sizeGB: 20
+  - type: web
+    name: fastapi-ollama
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
     envVars:
-      - key: OLLAMA_MODELS
-        value: /models
       - key: OLLAMA_HOST
         value: 0.0.0.0:11434
-
-  # --- Public FastAPI web ---
-  - type: web
-    name: fastapi
-    runtime: python
-    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
-    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
-    envVars:
       - key: OLLAMA_BASE_URL
-        value: http://ollama:11434
-    # optional:
-    # healthCheckPath: /healthz
-    # region: frankfurt
+        value: http://127.0.0.1:11434   # talk to the in-container Ollama
+    healthCheckPath: /healthz

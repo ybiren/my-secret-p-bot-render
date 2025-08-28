@@ -29,3 +29,7 @@ def complete(prompt: str = "Hello"):
                       json={"model": "llama3.2:1b", "prompt": prompt})
     r.raise_for_status()
     return r.json()
+
+@app.get("/healthz")
+def healthz():
+    return {"ok": True}

@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Start Ollama in background
+# Start Ollama in the background
 /bin/ollama serve &
-# (Optional) give it a moment to boot
+# Give it a moment to boot (optional)
 sleep 2
 
-# If you want to ensure a model exists at runtime (if not baked), uncomment:
-# /bin/ollama pull qwen2.5:3b || true
+# (Optional) pull a small model in background to avoid blocking startup
+# nohup /bin/ollama pull llama3.2:1b >/dev/null 2>&1 &
 
-# Start FastAPI (listening on the Render-assigned PORT=10000)
-exec uvicorn main:app --host 0.0.0.0 --port "${PORT:-10000}"
+# Start FastAPI — must bind to $PORT on Render
+exec uvicorn app:app --host 0.0.0.0 --port "${PORT:-10000}"
